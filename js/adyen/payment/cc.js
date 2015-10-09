@@ -414,6 +414,7 @@ function contains(a, obj) {
 
 \*****************/
 function getBaseCard(cardnumber, availablecards){
+	var baseCard = null;
 	//for each card (except the luhncheck card (last element))
 	for (var i = 0; i < (Cards.size - 1); i++) {
 		//for each card length
@@ -430,24 +431,17 @@ function getBaseCard(cardnumber, availablecards){
 					var headruledigit = Cards[i].rules[m].toString().substring(0,l);
 					if (headdigit === headruledigit){
 						if(contains(availablecards,Cards[i].cardtype)) {
-							//alert("cc type: "+Cards[i].getCardType());
-							return Cards[i];
-						}
-						//See if the card is a MaestroCard which is a sub-brand of Mastercard 
-						//TODO make this change generic for all card and subcards if required
-						if(contains(availablecards,MasterCard.cardtype)) {
-							if(Cards[i].cardtype === MaestroCard.cardtype){
-								return MasterCard;
+							// Return the last card match
+							if(baseCard == null || Cards[i].cardtype != baseCard.cardtype){
+								baseCard = Cards[i];
 							}
 						}
 					}
 				}
-				//return null;
 			}
-			//return null;
 		}
 	}
-	return null;
+	return baseCard;
 }
 
 function getBaseCardByType(variant){	
